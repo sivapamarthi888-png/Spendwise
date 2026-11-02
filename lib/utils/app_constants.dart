@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-
 /// Application-wide constants: categories, payment methods, validation limits
 /// and shared string material. One source of truth for the whole app.
 library;
+
+import 'package:flutter/material.dart';
 
 class AppConstants {
   AppConstants._();

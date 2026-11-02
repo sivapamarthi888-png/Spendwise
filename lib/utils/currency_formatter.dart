@@ -1,7 +1,7 @@
-import 'package:intl/intl.dart';
-
 /// Indian Rupee formatting helpers used by every money display in the app.
 library;
+
+import 'package:intl/intl.dart';
 
 class CurrencyFormatter {
   CurrencyFormatter._();
@@ -32,8 +32,7 @@ class CurrencyFormatter {
 
   /// Strips any symbol, group separators and spaces from user input.
   static double parseAmount(String raw) {
-    final String cleaned =
-        raw.replaceAll(RegExp('[$,\\s]'), '');
+    final String cleaned = raw.replaceAll(RegExp(r'[^0-9.]'), '');
     return double.tryParse(cleaned) ?? 0.0;
   }
 }

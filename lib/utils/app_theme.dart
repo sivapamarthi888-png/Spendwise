@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 /// Single seed colour → complete Material 3 light & dark themes.
 /// All screens pull colours exclusively from the ColorScheme / ThemeData in
 /// here — no screen-level hardcoded colours.
-library;
 
 class AppTheme {
   AppTheme._();
@@ -43,7 +42,7 @@ class AppTheme {
     final ColorScheme effective = isLight
         ? scheme.copyWith(
             secondary: const Color(0xFF0F766E),
-            primaryContainer: scheme.primary.withOpacity(0.12),
+            primaryContainer: scheme.primary.withValues(alpha: 0.12),
             onPrimaryContainer: scheme.primary,
           )
         : scheme.copyWith(
@@ -58,7 +57,7 @@ class AppTheme {
       visualDensity: VisualDensity.adaptivePlatformDensity,
       scaffoldBackgroundColor: isLight ? lightBackground : colors.surface,
       splashFactory: InkRipple.splashFactory,
-      iconTheme: IconThemeData(color: colors.onSurface.withOpacity(0.8)),
+      iconTheme: IconThemeData(color: colors.onSurface.withValues(alpha: 0.8)),
       appBarTheme: AppBarTheme(
         elevation: 0,
         centerTitle: isLight == false ? true : false,
@@ -81,12 +80,12 @@ class AppTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radiusLarge),
           side: BorderSide(
-            color: colors.outlineVariant.withOpacity(0.5),
+            color: colors.outlineVariant.withValues(alpha: 0.5),
           ),
         ),
       ),
       dividerTheme: DividerThemeData(
-        color: colors.outlineVariant.withOpacity(0.5),
+        color: colors.outlineVariant.withValues(alpha: 0.5),
         thickness: 1,
         space: 1,
       ),
@@ -94,7 +93,7 @@ class AppTheme {
         filled: true,
         fillColor: colors.surfaceContainerLow,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        hintStyle: TextStyle(color: colors.onSurfaceVariant.withOpacity(0.7)),
+        hintStyle: TextStyle(color: colors.onSurfaceVariant.withValues(alpha: 0.7)),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radiusMedium),
           borderSide: BorderSide(color: colors.outlineVariant),
@@ -102,7 +101,7 @@ class AppTheme {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radiusMedium),
           borderSide: BorderSide(
-            color: colors.outlineVariant.withOpacity(0.7),
+            color: colors.outlineVariant.withValues(alpha: 0.7),
           ),
         ),
         focusedBorder: OutlineInputBorder(
@@ -143,7 +142,7 @@ class AppTheme {
         ),
       ),
       chipTheme: ChipThemeData(
-        side: BorderSide(color: colors.outlineVariant.withOpacity(0.6)),
+        side: BorderSide(color: colors.outlineVariant.withValues(alpha: 0.6)),
         selectedColor: colors.primaryContainer,
         showCheckmark: false,
         labelStyle: TextStyle(fontSize: 13, color: colors.onSurface),
@@ -199,7 +198,7 @@ class AppTheme {
           fontWeight: FontWeight.w700,
         ),
         contentTextStyle: TextStyle(
-          color: colors.onSurface.withOpacity(0.85),
+          color: colors.onSurface.withValues(alpha: 0.85),
           fontSize: 14,
           height: 1.4,
         ),

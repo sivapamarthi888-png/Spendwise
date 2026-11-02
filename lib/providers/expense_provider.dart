@@ -92,7 +92,7 @@ class ExpenseProvider extends ChangeNotifier {
     try {
       final int id = await _store.insert(expense);
       // Avoid duplicate notification races when two adds overlap.
-      _expenses = <Expense>[.._expenses, expense.copyWith(id: id)];
+      _expenses = <Expense>[..._expenses, expense.copyWith(id: id)];
       _initialised = true;
       _error = null;
       notifyListeners();
@@ -252,7 +252,6 @@ class ExpenseProvider extends ChangeNotifier {
             a.createdAt.millisecondsSinceEpoch);
       });
     if (!_newestFirst) {
-      result.reversed;
       return result.reversed.toList();
     }
     return result;
@@ -309,7 +308,7 @@ class ExpenseProvider extends ChangeNotifier {
   /// Count of currently visible (filtered) transactions.
   int get filteredCount {
     int count = 0;
-    final Iterable<Expense> it = _searchFilterType().iterator;
+    final Iterator<Expense> it = _searchFilterType().iterator;
     while (it.moveNext()) {
       count++;
     }

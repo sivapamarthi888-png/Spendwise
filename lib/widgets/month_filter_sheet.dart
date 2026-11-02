@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../models/expense.dart';
 import '../utils/date_formatter.dart';
@@ -48,12 +47,6 @@ class MonthFilterSheet extends StatelessWidget {
             return ListTile(
               leading: const Icon(Icons.calendar_month_rounded),
               title: Text(DateFormatter.formatMonth(month)),
-              trailing: Text(
-                '${_monthYear(month.year)}',
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-              ),
               selected: key == selected,
               onTap: () => Navigator.of(context).pop(key),
             );
@@ -70,8 +63,6 @@ class MonthFilterSheet extends StatelessWidget {
     final int month = int.tryParse(parts.length > 1 ? parts[1] : '') ?? DateTime.now().month;
     return DateTime(year, month);
   }
-
-  static String _monthYear(int year) => Intl.message('Year $year', name: 'y');
 }
 
 /// Parses a MonthFilterSheet selection back to a display label.

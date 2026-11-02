@@ -66,7 +66,7 @@ class SpendingChart extends StatelessWidget {
           maxValue: maxValue <= 0 ? 1 : maxValue,
           maxIndex: maxIndex,
           barColor: scheme.primary,
-          trackColor: scheme.surfaceContainerHighest.withOpacity(0.55),
+          trackColor: scheme.surfaceContainerHighest.withValues(alpha: 0.55),
           labelColor: scheme.onSurfaceVariant,
           valueLabelColor: scheme.onSurface,
           textStyle: theme.textTheme.labelSmall!,
@@ -158,9 +158,7 @@ class _BarChartPainter extends CustomPainter {
         final Paint paint = Paint()
           ..color = i == maxIndex
               ? barColor
-              : barColor.opacity > 0
-                  ? barColor.withOpacity(0.85)
-                  : barColor;
+              : barColor.withValues(alpha: 0.85);
         canvas.drawRRect(barRRect, paint);
       }
 

@@ -1,8 +1,8 @@
-import 'package:intl/intl.dart';
-
 /// Date formatting helpers. The app shows dates in DD MMM YYYY format
 /// (e.g. `02 Nov 2026`) everywhere.
 library;
+
+import 'package:intl/intl.dart';
 
 class DateFormatter {
   DateFormatter._();

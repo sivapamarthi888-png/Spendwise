@@ -16,9 +16,7 @@ class ThemeProvider extends ChangeNotifier {
   /// Loads the saved choice. Must be awaited before `runApp`.
   Future<void> load() async {
     try {
-      if (_prefs == null) {
-        _prefs = await SharedPreferences.getInstance();
-      }
+      _prefs ??= await SharedPreferences.getInstance();
       final String? saved = _prefs?.getString(_storageKey);
       switch (saved) {
         case 'light':

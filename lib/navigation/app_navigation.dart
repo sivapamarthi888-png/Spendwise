@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../models/expense.dart';
 import '../screens/add_expense_screen.dart';
 import '../screens/dashboard_screen.dart';
-import '../screens/expense_detail_screen.dart';
 import '../screens/settings_screen.dart';
 import '../screens/statistics_screen.dart';
 

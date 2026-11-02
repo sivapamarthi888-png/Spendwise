@@ -4,9 +4,6 @@ import 'package:path_provider/path_provider.dart';
 
 import '../models/expense.dart';
 
-/// Handles app-document access and the CSV export feature.
-library;
-
 class StorageService {
   const StorageService();
 
@@ -54,7 +51,7 @@ class StorageService {
 
   /// Escapes a value for RFC-4180-style CSV output.
   String _csvField(String value) {
-    final String needsQuotes =
+    final bool needsQuotes =
         value.contains(',') || value.contains('"') || value.contains('\n');
     final String escaped = value.replaceAll('"', '""');
     if (needsQuotes) return '"$escaped"';

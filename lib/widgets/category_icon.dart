@@ -22,7 +22,7 @@ class CategoryIcon extends StatelessWidget {
     final bool isDark = theme.brightness == Brightness.dark;
     // Background tint derived from the category accent, theme-aware.
     final Color background =
-        isDark ? accent.withOpacity(0.20) : accent.withOpacity(0.14);
+        isDark ? accent.withValues(alpha: 0.20) : accent.withValues(alpha: 0.14);
 
     return Container(
       width: size,

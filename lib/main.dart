@@ -40,7 +40,7 @@ class SpendWiseApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: <SingleChildWidget>[
+      providers: [
         // Theme state is created eagerly and shared with every screen.
         ChangeNotifierProvider<ThemeProvider>.value(value: themeProvider),
         // Single source of truth for all transaction data.

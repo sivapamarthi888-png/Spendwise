@@ -136,8 +136,9 @@ class DatabaseService implements TransactionStore {
     }
     try {
       final Database db = await database;
-      return db.insert('transactions', expense.toMap(),
+      final int id = await db.insert('transactions', expense.toMap(),
           conflictAlgorithm: ConflictAlgorithm.replace);
+      return id;
     } catch (_) {
       rethrow;
     }
@@ -150,12 +151,13 @@ class DatabaseService implements TransactionStore {
     }
     try {
       final Database db = await database;
-      return db.update(
+      final int rows = await db.update(
         'transactions',
         expense.toMap(),
         where: 'id = ?',
         whereArgs: <Object?>[expense.id],
       );
+      return rows;
     } catch (_) {
       rethrow;
     }
@@ -165,7 +167,9 @@ class DatabaseService implements TransactionStore {
   Future<int> delete(int id) async {
     try {
       final Database db = await database;
-      return db.delete('transactions', where: 'id = ?', whereArgs: <Object?>[id]);
+      final int rows =
+          await db.delete('transactions', where: 'id = ?', whereArgs: <Object?>[id]);
+      return rows;
     } catch (_) {
       rethrow;
     }
@@ -175,7 +179,8 @@ class DatabaseService implements TransactionStore {
   Future<int> clearAll() async {
     try {
       final Database db = await database;
-      return db.delete('transactions');
+      final int rows = await db.delete('transactions');
+      return rows;
     } catch (_) {
       rethrow;
     }

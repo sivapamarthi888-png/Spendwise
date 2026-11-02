@@ -24,7 +24,7 @@ class SummaryCard extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     final bool isDark = theme.brightness == Brightness.dark;
     final Color tint =
-        isDark ? accent.withOpacity(0.18) : accent.withOpacity(0.10);
+        isDark ? accent.withValues(alpha: 0.18) : accent.withValues(alpha: 0.10);
 
     return Container(
       padding: const EdgeInsets.all(14),
@@ -32,7 +32,7 @@ class SummaryCard extends StatelessWidget {
         color: theme.colorScheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(18),
         border: Border.all(
-          color: theme.colorScheme.outlineVariant.withOpacity(0.5),
+          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
         ),
       ),
       child: Row(
