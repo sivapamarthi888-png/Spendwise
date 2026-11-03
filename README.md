@@ -145,6 +145,12 @@ flutter build apk --release
 
 Output: `build/app/outputs/flutter-apk/app-release.apk`.
 
+> Windows/OneDrive note: if the project folder lives inside OneDrive, the
+> sync engine can lock files inside `build/` and fail the Gradle build.
+> Pause OneDrive (or temporarily kill `OneDrive.exe`) during the build.
+> Kotlin incremental compilation is already disabled (cross-drive cache
+> limitation) via `android/gradle.properties`.
+
 **Install on an Android phone:**
 
 1. Copy `app-release.apk` to the phone.

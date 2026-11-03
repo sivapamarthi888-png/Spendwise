@@ -19,13 +19,15 @@ happened. No speculative or planned-but-unobserved issues are listed.
 | D-11 | Launcher icon | `flutter_launcher_icons` was configured with `android: "launcher_icon"`, but the manifest references `@mipmap/ic_launcher` — the custom icon would not have been picked up | Launcher icon regression risk | Config/manifest name mismatch | Regenerated using the default name (`android: true`) so the generated `ic_launcher.xml` + mipmaps match the manifest reference | **Resolved — verified** |
 | D-12 | Android resources | The `android/app/src/main/res` directory was accidentally deleted (`Remove-Item -Recurse`) during workspace cleanup | Splash theme, night styles, colours and all launcher mipmaps missing | Operator error (unsafe command) | Reconstructed from the standard Flutter template (`drawable/launch_background.xml`, `drawable-v21/`, `values/styles.xml`, `values-night/styles.xml`) and regenerated all generated resources (adaptive icon XML, colours.xml, all-densities mipmaps) via `flutter_launcher_icons`; full tree verified on disk and by release build | **Resolved — verified** |
 | D-13 | Analyzer sweep | Remaining final analyzer issues after the restore: unused detail-screen import in the navigation shell, `SingleChildWidget` type reference after cleanup, spread typo `[.._expenses, …]`, misplaced `library;` directive | 4 analyzer errors | Drift from interrupted restore sequence in D-02 | Fixed individually; final `flutter analyze`: **No issues found** | **Resolved — verified** |
+| D-14 | Release build | Every `flutter build apk --release` attempt failed mid-build with unrelated errors each time: `Unable to delete directory …/build/...`, Kotlin "could not close incremental caches / different roots", `AccessDeniedException` on `merged_native_libs` (each run after a JVM/daemon crash left stale locks) | Repeated blocked builds spanning several restarts | (a) Kotlin incremental caches cannot relativize paths across drive roots (pub cache on `D:`, project on `C:`), and (b) OneDrive file-sync locks files inside the workspace `build/` directory on Windows | `kotlin.incremental=false` in `android/gradle.properties` (with explanatory comment) + killed orphan Gradle daemons and paused OneDrive locally, purged the `build/` tree before the final build, then re-enabled OneDrive | **Resolved — release APK built successfully (50.9 MB)** |
+| D-15 | Android config | `applicationId` was `com.spendwise.spendwise` (Flutter's default `--org` + project-name concatenation), while the approved configuration requires `com.spendwise` | App identity did not match the submission requirement | Template default | Set `applicationId = "com.spendwise"` in `android/app/build.gradle.kts`; the Kotlin `namespace`/package structure was left intact so `MainActivity` keeps resolving; final APK rebuild verified | **Resolved — verified/rebuilt** |
 
 ## Verification trail
 
 | Check | Latest actual result |
 | --- | --- |
-| `flutter pub get` | `Got dependencies!` (exit 0) |
+| `flutter pub get` | exit 0 |
 | `flutter analyze` | `No issues found!` (exit 0) |
 | `flutter test` | `+33: All tests passed!` (exit 0) |
-| `flutter build apk --release` | see final report (pending at the time of writing) |
+| `flutter build apk --release` | **Succeeded** — `build/app/outputs/flutter-apk/app-release.apk`, 50.9 MB (53,355,349 bytes) |
 | Physical device run | **Not performed** — no device attached to the build machine |
