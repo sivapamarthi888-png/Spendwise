@@ -93,17 +93,13 @@ simulate storage failures deterministically.
 
 ## 4. Screenshots
 
-> Screenshots are captured from the running app (web build and/or device).
-> Place the image files in `docs/screens/` with the names below — the table
-> then renders them directly on GitHub.
+Captured from the running app (web build on a physical phone).
 
 | Screen | Screenshot |
 | --- | --- |
-| Dashboard | `docs/screens/dashboard.png` — TODO |
-| Add / Edit expense | `docs/screens/add_expense.png` — TODO |
-| Expense detail | `docs/screens/expense_detail.png` — TODO |
-| Statistics | `docs/screens/statistics.png` — TODO |
-| Settings | `docs/screens/settings.png` — TODO |
+| Dashboard | ![Dashboard](docs/screens/dashboard.jpg) |
+| Add / Edit expense | ![Add Expense](docs/screens/add_expense.jpg) |
+| Statistics | ![Statistics](docs/screens/statistics.jpg) |
 
 ## 5. Data source
 
