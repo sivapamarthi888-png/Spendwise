@@ -49,3 +49,5 @@ app.*.map.json
 
 # Personal prep material - not part of the submission
 DEMO_SCRIPT.md
+
+run_website.bat
