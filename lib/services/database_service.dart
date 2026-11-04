@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
 import '../models/expense.dart';
 
@@ -72,6 +74,12 @@ class DatabaseService implements TransactionStore {
 
   Future<Database> _doOpen() async {
     if (_db != null && _db!.isOpen) return _db!;
+    if (kIsWeb) {
+      // Browser: route sqflite through the SQLite-WASM factory instead of
+      // the unavailable mobile plugin. The WASM database is persisted by
+      // the browser (OPFS/IndexedDB), so data survives page reloads.
+      databaseFactory = databaseFactoryFfiWeb;
+    }
     final String dir = _dbPath ?? (await _databasesDirectory());
     final Database db = await openDatabase(
       '$dir/spendwise.db',
@@ -89,6 +97,11 @@ class DatabaseService implements TransactionStore {
   }
 
   Future<void> _onConfigure(Database db) async {
+    if (kIsWeb) {
+      // The WASM build runs on the browser-managed OPFS filesystem; the
+      // journal-mode pragma is unnecessary there.
+      return;
+    }
     // Foreign keys are not required (single table) but WAL improves speed.
     await db.execute('PRAGMA journal_mode=WAL;');
   }

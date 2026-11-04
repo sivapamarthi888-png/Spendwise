@@ -160,29 +160,59 @@ Output: `build/app/outputs/flutter-apk/app-release.apk`.
    ```
 3. Launch **SpendWise** from the launcher.
 
-## 6. Data & privacy
+## 6. Website (web) version
 
-* Database: local SQLite file in the app's private storage (table `expenses`).
+SpendWise is also available as a **fully functional website** — the same
+codebase compiled with `flutter build web`. On web, SQLite runs in the
+browser via WASM (`sqflite_common_ffi_web`) and is persisted in browser
+storage (OPFS/IndexedDB), so **records survive page reloads and browser
+restarts** — the same database semantics as on Android.
+
+**Run locally:**
+
+```bash
+flutter build web --release
+python serve_web.py            # serves http://127.0.0.1:8421
+```
+
+`serve_web.py` adds the `Cross-Origin-Opener-Policy` /
+`Cross-Origin-Embedder-Policy` headers the browser storage APIs require.
+(Plain `python -m http.server` may disable persistence in some browsers.)
+
+**Deploy anywhere static files are served** — GitHub Pages, Firebase
+Hosting, Netlify, any web server — by uploading the `build/web` folder
+(keep the two security headers in place).
+
+| Platform | Storage backend | Persistence |
+| --- | --- | --- |
+| Android APK | `sqflite` (real SQLite) | ✅ Permanent, device-local |
+| Web | SQLite-WASM in browser (OPFS/IndexedDB) | ✅ Survives reloads, per-browser profile |
+
+## 7. Data & privacy
+
+* Database: local SQLite file in the app's private storage (table `expenses`) on Android; browser-managed storage on web.
 * CSV export: written to the app documents directory, then shared via the
   Android share sheet — no data leaves the device except through the user's
   explicit share action.
 * No third-party analytics, no network calls, no accounts.
 
-## 7. Known limitations
+## 8. Known limitations
 
 * Physical-device verification (install + smoke test) is pending; all checks so
   far are build-level and emulator-level (`flutter analyze`, `flutter test`).
-* CSV export targets the device share sheet; importing CSV back is not supported.
+* CSV export targets the device share sheet (Android); importing CSV back is not supported.
 * Statistics charts cover 3 months (window configurable in code).
+* Web database is per-browser/per-device profile (like any website's local
+  storage); it does not sync between devices — same offline-first privacy model.
 
-## 8. Team
+## 9. Team
 
 | Member | Role | Contribution |
 | --- | --- | --- |
 | *Name — TODO* | *TODO* | *TODO* |
 | *Name — TODO* | *TODO* | *TODO* |
 
-## 9. Defects & incident log
+## 10. Defects & incident log
 
 See [DEFECT_LOG.md](DEFECT_LOG.md) for every real defect found during
 development, its impact and its resolution status.

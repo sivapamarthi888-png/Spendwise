@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -6,7 +5,6 @@ import 'navigation/app_navigation.dart';
 import 'providers/expense_provider.dart';
 import 'providers/theme_provider.dart';
 import 'services/database_service.dart';
-import 'services/memory_store.dart';
 import 'utils/app_constants.dart';
 import 'utils/app_theme.dart';
 
@@ -27,14 +25,9 @@ Future<void> main() async {
   await themeProvider.load();
   // Warm up the database before first paint so the dashboard reaches its
   // data state as fast as possible. Failures surface as the error state.
-  //
-  // Flutter web has no sqflite plugin: the preview uses an in-memory store
-  // (session-only, pre-seeded for demonstration). Android keeps real SQLite.
-  if (kIsWeb) {
-    // Nothing to open for MemoryStore; store is wired in the provider below.
-  } else {
-    await DatabaseService.instance.open();
-  }
+  // Works on Android (sqflite plugin) and web (SQLite-WASM, persisted in
+  // the browser); failures surface as the dashboard error state.
+  await DatabaseService.instance.open();
 
   runApp(SpendWiseApp(themeProvider: themeProvider));
 }
@@ -54,9 +47,7 @@ class SpendWiseApp extends StatelessWidget {
         ChangeNotifierProvider<ThemeProvider>.value(value: themeProvider),
         // Single source of truth for all transaction data.
         ChangeNotifierProvider<ExpenseProvider>(
-          create: (_) => ExpenseProvider(
-            store: kIsWeb ? MemoryStore(seed: previewSeed()) : null,
-          ),
+          create: (_) => ExpenseProvider(),
         ),
       ],
       child: Consumer<ThemeProvider>(
