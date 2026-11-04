@@ -67,6 +67,7 @@ class SpendingChart extends StatelessWidget {
           maxIndex: maxIndex,
           barColor: scheme.primary,
           trackColor: scheme.surfaceContainerHighest.withValues(alpha: 0.55),
+          trackOutlineColor: scheme.outlineVariant.withValues(alpha: 0.8),
           labelColor: scheme.onSurfaceVariant,
           valueLabelColor: scheme.onSurface,
           textStyle: theme.textTheme.labelSmall!,
@@ -85,6 +86,7 @@ class _BarChartPainter extends CustomPainter {
     required this.maxIndex,
     required this.barColor,
     required this.trackColor,
+    required this.trackOutlineColor,
     required this.labelColor,
     required this.valueLabelColor,
     required this.textStyle,
@@ -97,6 +99,7 @@ class _BarChartPainter extends CustomPainter {
   final int maxIndex;
   final Color barColor;
   final Color trackColor;
+  final Color trackOutlineColor;
   final Color labelColor;
   final Color valueLabelColor;
   final TextStyle textStyle;
@@ -120,27 +123,61 @@ class _BarChartPainter extends CustomPainter {
 
     final TextPainter tp = TextPainter(textDirection: TextDirection.ltr);
 
+    // Trade-graph style trend line behind the bars: connects each day's
+    // value across the full plot area so the week's shape reads at a glance.
+    if (count > 1) {
+      final Path trend = Path();
+      for (int i = 0; i < count; i++) {
+        final double slotCenter = slot * i + slot / 2;
+        final double barH =
+            plotHeight * (values[i] / maxValue).clamp(0.0, 1.0);
+        final double y = topInset + plotHeight - barH;
+        if (i == 0) {
+          trend.moveTo(slotCenter, y);
+        } else {
+          trend.lineTo(slotCenter, y);
+        }
+      }
+      canvas.drawPath(
+        trend,
+        Paint()
+          ..color = barColor.withValues(alpha: 0.40)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2
+          ..strokeJoin = StrokeJoin.round,
+      );
+    }
+
     for (int i = 0; i < count; i++) {
       final double slotCenter = slot * i + slot / 2;
       final double barH = plotHeight * (values[i] / maxValue).clamp(0.0, 1.0);
 
       // Track (full-height neutral bar) only for days that actually have
-      // spending — unused days stay in the background colour, per design.
+      // spending. Empty days get a subtle outline so they stay visible
+      // against the background without competing with real data.
+      final Rect trackRect = Rect.fromLTWH(
+        slotCenter - barWidth / 2,
+        topInset,
+        barWidth,
+        plotHeight,
+      );
+      final RRect trackRRect = RRect.fromRectAndCorners(
+        trackRect,
+        topLeft: const Radius.circular(6),
+        topRight: const Radius.circular(6),
+        bottomLeft: const Radius.circular(6),
+        bottomRight: const Radius.circular(6),
+      );
       if (values[i] > 0) {
-        final Rect trackRect = Rect.fromLTWH(
-          slotCenter - barWidth / 2,
-          topInset,
-          barWidth,
-          plotHeight,
-        );
-        final RRect trackRRect = RRect.fromRectAndCorners(
-          trackRect,
-          topLeft: const Radius.circular(6),
-          topRight: const Radius.circular(6),
-          bottomLeft: const Radius.circular(6),
-          bottomRight: const Radius.circular(6),
-        );
         canvas.drawRRect(trackRRect, Paint()..color = trackColor);
+      } else {
+        canvas.drawRRect(
+          trackRRect,
+          Paint()
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 1
+            ..color = trackOutlineColor,
+        );
       }
 
       if (values[i] > 0) {
@@ -200,5 +237,6 @@ class _BarChartPainter extends CustomPainter {
       oldDelegate.maxIndex != maxIndex ||
       oldDelegate.barColor != barColor ||
       oldDelegate.trackColor != trackColor ||
+      oldDelegate.trackOutlineColor != trackOutlineColor ||
       oldDelegate.showValueLabels != showValueLabels;
 }

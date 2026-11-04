@@ -1,4 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Internet is used ONLY for the optional in-app update check against
+         the project's own website. The app itself is offline-first. -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:label="SpendWise"
         android:name="${applicationName}"

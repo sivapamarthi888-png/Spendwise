@@ -203,10 +203,12 @@ Hosting, Netlify, any web server — by uploading the `build/web` folder
 ## 8. Data & privacy
 
 * Database: local SQLite file in the app's private storage (table `expenses`) on Android; browser-managed storage on web.
-* CSV export: written to the app documents directory, then shared via the
-  Android share sheet — no data leaves the device except through the user's
-  explicit share action.
-* No third-party analytics, no network calls, no accounts.
+* CSV export: written to the app documents directory and handed to the
+  Android share sheet (or a browser download on web) — no data leaves the
+  device except through the user's explicit share action.
+* No third-party analytics, no accounts. The Android app performs one
+  optional update check against this project's own website
+  (`app-version.json`); it sends no personal data and fails silently offline.
 
 ## 9. Known limitations
 

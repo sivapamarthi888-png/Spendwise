@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../models/expense.dart';
 import '../providers/expense_provider.dart';
+import '../services/update_service.dart';
 import '../utils/app_constants.dart';
 import '../utils/currency_formatter.dart';
 import '../utils/date_formatter.dart';
@@ -53,8 +55,49 @@ class _DashboardLifecycleState extends State<_DashboardLifecycle>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         context.read<ExpenseProvider>().ensureLoaded();
+        _checkForAppUpdate();
       }
     });
+  }
+
+  Future<void> _checkForAppUpdate() async {
+    final AppUpdateInfo? update = await const UpdateService().checkForUpdate();
+    if (update == null || !update.updateAvailable || !mounted) return;
+    if (!context.mounted) return;
+    await showDialog<void>(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        final ThemeData theme = Theme.of(dialogContext);
+        return AlertDialog(
+          icon: Icon(Icons.system_update_alt_rounded,
+              color: theme.colorScheme.primary, size: 36),
+          title: const Text('Update available'),
+          content: Text(
+            'SpendWise ${update.latestVersion} is available '
+            '(you have ${update.currentVersion}).\n\n'
+            'Download the new APK, then install it — your data is kept.',
+            style: const TextStyle(fontSize: 13),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: const Text('Later'),
+            ),
+            FilledButton.icon(
+              icon: const Icon(Icons.download_rounded, size: 18),
+              label: const Text('Download update'),
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+                launchUrl(
+                  Uri.parse(update.apkUrl),
+                  mode: LaunchMode.externalApplication,
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override

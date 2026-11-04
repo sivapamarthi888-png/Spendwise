@@ -89,7 +89,7 @@ class ProfileScreen extends StatelessWidget {
                 _infoRow(theme, Icons.offline_bolt_rounded, 'Offline-first',
                     'All data stays on your device in SQLite'),
                 _infoRow(theme, Icons.privacy_tip_rounded, 'Private by design',
-                    'No accounts, no analytics, no network'),
+                    'No accounts, no analytics — data never leaves the device'),
                 _infoRow(theme, Icons.palette_rounded, 'Material 3',
                     'Light & dark themes from one seed colour'),
               ],
