@@ -24,13 +24,16 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Non-const child: the lifecycle wrapper rebuilds it on app resume so
+    // time-dependent UI (greeting, date header) never goes stale.
     return _DashboardLifecycle(
-      child: const _DashboardBody(),
+      child: _DashboardBody(),
     );
   }
 }
 
-/// Kicks off the (idempotent) initial database load exactly once.
+/// Kicks off the (idempotent) initial database load exactly once and keeps
+/// time-dependent header content fresh when the app resumes from background.
 class _DashboardLifecycle extends StatefulWidget {
   const _DashboardLifecycle({required this.child});
 
@@ -40,16 +43,34 @@ class _DashboardLifecycle extends StatefulWidget {
   State<_DashboardLifecycle> createState() => _DashboardLifecycleState();
 }
 
-class _DashboardLifecycleState extends State<_DashboardLifecycle> {
+class _DashboardLifecycleState extends State<_DashboardLifecycle>
+    with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     // Schedule after first frame so Provider is fully available.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         context.read<ExpenseProvider>().ensureLoaded();
       }
     });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Rebuild on resume: the greeting/date header is computed from
+    // DateTime.now() at build time, so an app left in the background since
+    // the morning would otherwise keep showing a stale greeting.
+    if (state == AppLifecycleState.resumed && mounted) {
+      setState(() {});
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override
