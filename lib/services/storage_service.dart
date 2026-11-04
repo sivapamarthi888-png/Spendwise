@@ -12,6 +12,7 @@ class StorageService {
   const StorageService();
 
   /// Exports [expenses] to a CSV file with a stable header row.
+  /// Records are written in chronological creation order (ascending id).
   /// Returns the file path (Android) or filename (web) on success;
   /// throws on errors so callers can surface a failure snackbar.
   Future<String> exportToCsv(List<Expense> expenses) async {
@@ -21,7 +22,12 @@ class StorageService {
         '_${now.hour.toString().padLeft(2, '0')}${now.minute.toString().padLeft(2, '0')}';
     final String filename = 'spendwise_expenses_$stamp.csv';
 
-    return exportCsvFile(filename, buildCsv(expenses));
+    // Chronological creation order (ascending id), independent of the
+    // dashboard's newest-first display sort.
+    final List<Expense> ordered = <Expense>[...expenses]..sort(
+        (Expense a, Expense b) => (a.id ?? 0).compareTo(b.id ?? 0),
+      );
+    return exportCsvFile(filename, buildCsv(ordered));
   }
 
   /// Builds the RFC-4180-style CSV document for [expenses].
