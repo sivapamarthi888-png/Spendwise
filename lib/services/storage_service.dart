@@ -1,34 +1,31 @@
-import 'dart:io';
-
-import 'package:path_provider/path_provider.dart';
-
 import '../models/expense.dart';
 
+import 'export_target.dart';
+
+/// Builds and saves the transactions CSV export.
+///
+/// The sink is platform-specific via [saveTextFile]:
+/// - Android: file written under `<app documents>/spendwise_exports`,
+///   the absolute path is returned.
+/// - Web: the browser downloads the file; the filename is returned.
 class StorageService {
   const StorageService();
 
-  /// Directory where exported CSV files are written
-  /// (`<app documents>/spendwise_exports`).
-  Future<Directory> exportDirectory() async {
-    final Directory docs = await getApplicationDocumentsDirectory();
-    final Directory dir = Directory('${docs.path}${ Platform.pathSeparator }spendwise_exports');
-    if (!dir.existsSync()) {
-      await dir.create(recursive: true);
-    }
-    return dir;
-  }
-
   /// Exports [expenses] to a CSV file with a stable header row.
-  /// Returns the absolute file path on success; throws on IO errors so
-  /// callers can surface a failure snackbar.
+  /// Returns the file path (Android) or filename (web) on success;
+  /// throws on errors so callers can surface a failure snackbar.
   Future<String> exportToCsv(List<Expense> expenses) async {
-    final Directory dir = await exportDirectory();
     final DateTime now = DateTime.now();
     final String stamp =
         '${now.year}${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}'
         '_${now.hour.toString().padLeft(2, '0')}${now.minute.toString().padLeft(2, '0')}';
-    final String path = '${dir.path}${Platform.pathSeparator}spendwise_expenses_$stamp.csv';
+    final String filename = 'spendwise_expenses_$stamp.csv';
 
+    return saveTextFile(filename, buildCsv(expenses));
+  }
+
+  /// Builds the RFC-4180-style CSV document for [expenses].
+  String buildCsv(List<Expense> expenses) {
     final StringBuffer buffer = StringBuffer();
     buffer.writeln('Id,Type,Amount,Category,Date,Time,Payment Method,Description');
     for (final Expense e in expenses) {
@@ -43,10 +40,7 @@ class StorageService {
         _csvField(e.description ?? ''),
       ].join(','));
     }
-
-    final File file = File(path);
-    await file.writeAsString(buffer.toString(), flush: true);
-    return path;
+    return buffer.toString();
   }
 
   /// Escapes a value for RFC-4180-style CSV output.

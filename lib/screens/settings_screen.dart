@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -74,7 +75,9 @@ class SettingsScreen extends StatelessWidget {
           _SettingsTile(
             icon: Icons.ios_share_rounded,
             title: 'Export to CSV',
-            subtitle: 'Save all transactions as a CSV file in app documents',
+            subtitle: kIsWeb
+                ? 'Download all transactions as a CSV file'
+                : 'Save all transactions as a CSV file in app documents',
             onTap: () => _exportCsv(context),
           ),
           _SettingsTile(
@@ -144,7 +147,9 @@ class SettingsScreen extends StatelessWidget {
                 color: Color(0xFF16A34A), size: 40),
             title: const Text('Export complete'),
             content: Text(
-              'Your CSV file was saved to:\n\n$path',
+              kIsWeb
+                  ? 'Your CSV file "$path" was downloaded to your device.'
+                  : 'Your CSV file was saved to:\n\n$path',
               style: const TextStyle(fontSize: 13),
             ),
             actions: <Widget>[
