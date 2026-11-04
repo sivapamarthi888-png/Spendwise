@@ -231,6 +231,7 @@ Hosting, Netlify, any web server — by uploading the `build/web` folder
 
 *All three members contributed to testing and the live demonstration.*
 Govindraju: also tuned the dashboard greeting and month-chip behaviour during testing.
+Sunny: tested the CSV export flow on web and Android and reported the export defect.
 
 ## 11. Defects & incident log
 
