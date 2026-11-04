@@ -51,3 +51,8 @@ app.*.map.json
 DEMO_SCRIPT.md
 
 run_website.bat
+
+# Play Store signing - never commit private keys
+android/key.properties
+*.jks
+*.keystore
