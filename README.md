@@ -223,10 +223,13 @@ Hosting, Netlify, any web server — by uploading the `build/web` folder
 
 ## 10. Team
 
-| Member | Role | Contribution |
+| Member | Role | Parts built |
 | --- | --- | --- |
-| *Name — TODO* | *TODO* | *TODO* |
-| *Name — TODO* | *TODO* | *TODO* |
+| **P. Siva Karthik** | Team lead & core engineering | App architecture, state management (`Provider`), SQLite database layer (`sqflite` + SQLite-WASM for web), automated tests (33), release APK build, GitHub & Vercel deployment, defect log |
+| **N. Govindraju** | Dashboard & analytics UI | Dashboard screen (summary cards, spending chart, search/filters, four UI states), statistics screen (monthly bar chart, category breakdown, daily spending), Material 3 light/dark theming |
+| **Sunny** | Forms, details & data tools | Add/Edit expense form with full validation, expense detail screen (edit/delete), CSV export (Android file + web download), settings screen (theme selection, clear data, about) |
+
+*All three members contributed to testing and the live demonstration.*
 
 ## 11. Defects & incident log
 
