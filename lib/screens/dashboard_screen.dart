@@ -190,28 +190,35 @@ class _DashboardScroll extends StatelessWidget {
         SliverPadding(
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
           sliver: SliverToBoxAdapter(
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: SummaryCard(
-                    title: 'Income',
-                    amount: provider.totalIncome,
-                    icon: Icons.south_west_rounded,
-                    accent: Theme.of(context).colorScheme.secondary,
-                    subtitle: 'All time',
-                  ),
+            // Cap the pair at a phone-like width so the tiles stay compact
+            // side-by-side on wide screens instead of stretching full-width.
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 520),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: SummaryCard(
+                        title: 'Income',
+                        amount: provider.totalIncome,
+                        icon: Icons.south_west_rounded,
+                        accent: Theme.of(context).colorScheme.secondary,
+                        subtitle: 'All time',
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: SummaryCard(
+                        title: 'Expenses',
+                        amount: provider.totalExpense,
+                        icon: Icons.north_east_rounded,
+                        accent: Theme.of(context).colorScheme.primary,
+                        subtitle: 'All time',
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: SummaryCard(
-                    title: 'Expenses',
-                    amount: provider.totalExpense,
-                    icon: Icons.north_east_rounded,
-                    accent: Theme.of(context).colorScheme.primary,
-                    subtitle: 'All time',
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ),
