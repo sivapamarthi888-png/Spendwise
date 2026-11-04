@@ -3,6 +3,7 @@
 <div align="center">
   <img src="assets/icon/app_icon.png" width="120" alt="SpendWise launcher icon" />
   <p><b>An offline-first expense tracker for Android, built with Flutter.</b></p>
+  <p><a href="https://spendwise-eta-swart.vercel.app"><b>🌐 Try the live web version</b></a></p>
 </div>
 
 SpendWise is a personal expense manager that lets you record income and expense
@@ -92,8 +93,9 @@ simulate storage failures deterministically.
 
 ## 4. Screenshots
 
-> Real device screenshots pending the first run on an emulator/physical device.
-> Placeholder slots are listed below.
+> Screenshots are captured from the running app (web build and/or device).
+> Place the image files in `docs/screens/` with the names below — the table
+> then renders them directly on GitHub.
 
 | Screen | Screenshot |
 | --- | --- |
@@ -103,7 +105,21 @@ simulate storage failures deterministically.
 | Statistics | `docs/screens/statistics.png` — TODO |
 | Settings | `docs/screens/settings.png` — TODO |
 
-## 5. Getting started
+## 5. Data source
+
+SpendWise uses **no external data source**. Every transaction is entered by
+the user through the in-app form and stored **locally**:
+
+* **Android:** a private SQLite database file (`expenses` table, indexed by
+  date) in the app's documents directory — created and managed via `sqflite`.
+* **Web:** the same SQLite schema running in the browser via SQLite-WASM
+  (`sqflite_common_ffi_web`), persisted in browser storage (OPFS/IndexedDB).
+
+There are no network calls, no accounts, no analytics and no third-party
+services; category names, icons and payment-method options are static
+constants defined in `lib/utils/app_constants.dart`.
+
+## 6. Getting started
 
 ### Prerequisites
 
@@ -160,7 +176,7 @@ Output: `build/app/outputs/flutter-apk/app-release.apk`.
    ```
 3. Launch **SpendWise** from the launcher.
 
-## 6. Website (web) version
+## 7. Website (web) version
 
 SpendWise is also available as a **fully functional website** — the same
 codebase compiled with `flutter build web`. On web, SQLite runs in the
@@ -188,7 +204,7 @@ Hosting, Netlify, any web server — by uploading the `build/web` folder
 | Android APK | `sqflite` (real SQLite) | ✅ Permanent, device-local |
 | Web | SQLite-WASM in browser (OPFS/IndexedDB) | ✅ Survives reloads, per-browser profile |
 
-## 7. Data & privacy
+## 8. Data & privacy
 
 * Database: local SQLite file in the app's private storage (table `expenses`) on Android; browser-managed storage on web.
 * CSV export: written to the app documents directory, then shared via the
@@ -196,7 +212,7 @@ Hosting, Netlify, any web server — by uploading the `build/web` folder
   explicit share action.
 * No third-party analytics, no network calls, no accounts.
 
-## 8. Known limitations
+## 9. Known limitations
 
 * Physical-device verification (install + smoke test) is pending; all checks so
   far are build-level and emulator-level (`flutter analyze`, `flutter test`).
@@ -205,14 +221,14 @@ Hosting, Netlify, any web server — by uploading the `build/web` folder
 * Web database is per-browser/per-device profile (like any website's local
   storage); it does not sync between devices — same offline-first privacy model.
 
-## 9. Team
+## 10. Team
 
 | Member | Role | Contribution |
 | --- | --- | --- |
 | *Name — TODO* | *TODO* | *TODO* |
 | *Name — TODO* | *TODO* | *TODO* |
 
-## 10. Defects & incident log
+## 11. Defects & incident log
 
 See [DEFECT_LOG.md](DEFECT_LOG.md) for every real defect found during
 development, its impact and its resolution status.
