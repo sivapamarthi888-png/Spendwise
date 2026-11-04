@@ -230,6 +230,7 @@ Hosting, Netlify, any web server — by uploading the `build/web` folder
 | **Sunny** | Forms, details & data tools | Add/Edit expense form with full validation, expense detail screen (edit/delete), CSV export (Android file + web download), settings screen (theme selection, clear data, about) |
 
 *All three members contributed to testing and the live demonstration.*
+Govindraju: also tuned the dashboard greeting and month-chip behaviour during testing.
 
 ## 11. Defects & incident log
 
