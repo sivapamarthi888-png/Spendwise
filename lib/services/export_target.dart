@@ -1,7 +1,8 @@
 /// Platform routing for the CSV export sink.
 ///
 /// - On IO platforms (Android/desktop) the CSV is written to the app
-///   documents directory and the absolute path is returned.
+///   documents directory and handed to the system share sheet, so the
+///   user can save it somewhere reachable.
 /// - On web the CSV is handed to the browser as a download and the
 ///   filename is returned.
 library;

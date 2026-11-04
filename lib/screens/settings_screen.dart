@@ -77,7 +77,7 @@ class SettingsScreen extends StatelessWidget {
             title: 'Export to CSV',
             subtitle: kIsWeb
                 ? 'Download all transactions as a CSV file'
-                : 'Save all transactions as a CSV file in app documents',
+                : 'Export transactions and save or share them anywhere',
             onTap: () => _exportCsv(context),
           ),
           _SettingsTile(
@@ -149,7 +149,9 @@ class SettingsScreen extends StatelessWidget {
             content: Text(
               kIsWeb
                   ? 'Your CSV file "$path" was downloaded to your device.'
-                  : 'Your CSV file was saved to:\n\n$path',
+                  : 'The share sheet is open — choose where to save your CSV '
+                      '(Files, Drive, WhatsApp…).\n\n'
+                      'An internal copy is also kept at:\n$path',
               style: const TextStyle(fontSize: 13),
             ),
             actions: <Widget>[

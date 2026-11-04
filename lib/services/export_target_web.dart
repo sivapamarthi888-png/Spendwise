@@ -5,7 +5,7 @@ import 'package:web/web.dart' as web;
 /// Web implementation: triggers a browser download of [content] as
 /// [filename] (saved to the user's Downloads folder). Returns the
 /// filename, since the browser controls the destination directory.
-Future<String> saveTextFile(String filename, String content) async {
+Future<String> exportCsvFile(String filename, String content) async {
   final web.Blob blob = web.Blob(
     <JSAny>[content.toJS].toJS,
     web.BlobPropertyBag(type: 'text/csv;charset=utf-8'),

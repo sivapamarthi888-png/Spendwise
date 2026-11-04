@@ -21,7 +21,7 @@ class StorageService {
         '_${now.hour.toString().padLeft(2, '0')}${now.minute.toString().padLeft(2, '0')}';
     final String filename = 'spendwise_expenses_$stamp.csv';
 
-    return saveTextFile(filename, buildCsv(expenses));
+    return exportCsvFile(filename, buildCsv(expenses));
   }
 
   /// Builds the RFC-4180-style CSV document for [expenses].

@@ -472,20 +472,34 @@ class _SpendingOverview extends StatelessWidget {
   }
 }
 
-class _SearchField extends StatelessWidget {
+class _SearchField extends StatefulWidget {
   const _SearchField({required this.provider});
 
   final ExpenseProvider provider;
 
   @override
+  State<_SearchField> createState() => _SearchFieldState();
+}
+
+class _SearchFieldState extends State<_SearchField> {
+  // One controller for the lifetime of the field. Recreating it on every
+  // rebuild (the previous implementation) reset the IME composition and
+  // caret on each keystroke, which made typed text appear reversed.
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final TextEditingController controller = TextEditingController(
-      text: provider.searchQuery,
-    );
+    final ExpenseProvider provider = widget.provider;
 
     return TextField(
-      controller: controller,
+      controller: _controller,
       textInputAction: TextInputAction.search,
       onChanged: provider.setSearchQuery,
       decoration: InputDecoration(
@@ -496,13 +510,12 @@ class _SearchField extends StatelessWidget {
             : IconButton(
                 icon: const Icon(Icons.close_rounded, size: 20),
                 onPressed: () {
-                  controller.clear();
+                  _controller.clear();
                   provider.setSearchQuery('');
                   FocusManager.instance.primaryFocus?.unfocus();
                 },
               ),
       ),
-      // Keep the caret placeable each rebuild without re-creating sessions.
       style: theme.textTheme.bodyMedium,
     );
   }
