@@ -124,21 +124,24 @@ class _BarChartPainter extends CustomPainter {
       final double slotCenter = slot * i + slot / 2;
       final double barH = plotHeight * (values[i] / maxValue).clamp(0.0, 1.0);
 
-      // Track (full-height neutral bar) keeps chart shape readable.
-      final Rect trackRect = Rect.fromLTWH(
-        slotCenter - barWidth / 2,
-        topInset,
-        barWidth,
-        plotHeight,
-      );
-      final RRect trackRRect = RRect.fromRectAndCorners(
-        trackRect,
-        topLeft: const Radius.circular(6),
-        topRight: const Radius.circular(6),
-        bottomLeft: const Radius.circular(6),
-        bottomRight: const Radius.circular(6),
-      );
-      canvas.drawRRect(trackRRect, Paint()..color = trackColor);
+      // Track (full-height neutral bar) only for days that actually have
+      // spending — unused days stay in the background colour, per design.
+      if (values[i] > 0) {
+        final Rect trackRect = Rect.fromLTWH(
+          slotCenter - barWidth / 2,
+          topInset,
+          barWidth,
+          plotHeight,
+        );
+        final RRect trackRRect = RRect.fromRectAndCorners(
+          trackRect,
+          topLeft: const Radius.circular(6),
+          topRight: const Radius.circular(6),
+          bottomLeft: const Radius.circular(6),
+          bottomRight: const Radius.circular(6),
+        );
+        canvas.drawRRect(trackRRect, Paint()..color = trackColor);
+      }
 
       if (values[i] > 0) {
         final Rect barRect = Rect.fromLTWH(

@@ -62,13 +62,18 @@ class SummaryCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 3),
-                Text(
-                  CurrencyFormatter.formatShort(amount),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    fontFamily: 'monospace',
+                // Scales down instead of ellipsising when the amount is long
+                // (e.g. ₹1,13,602.00 on narrow phones).
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    CurrencyFormatter.formatShort(amount),
+                    maxLines: 1,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'monospace',
+                    ),
                   ),
                 ),
                 if (subtitle != null) ...<Widget>[

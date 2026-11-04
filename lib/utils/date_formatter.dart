@@ -19,12 +19,13 @@ class DateFormatter {
       DateFormat('MMM yyyy').format(date);
 
   /// Weekday label for charts / dashboard greeting, e.g. `Mon` or `Today`.
+  /// Short forms ("Yest") keep seven-bar chart labels collision-free.
   static String dayLabel(DateTime date) {
     final DateTime now = DateTime.now();
     final DateTime today = DateTime(now.year, now.month, now.day);
     final DateTime day = DateTime(date.year, date.month, date.day);
     if (day == today) return 'Today';
-    if (day == today.subtract(const Duration(days: 1))) return 'Yesterday';
+    if (day == today.subtract(const Duration(days: 1))) return 'Yest';
     return DateFormat('dd MMM').format(date);
   }
 

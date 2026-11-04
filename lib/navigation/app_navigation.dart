@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/expense.dart';
 import '../screens/add_expense_screen.dart';
 import '../screens/dashboard_screen.dart';
+import '../screens/profile_screen.dart';
 import '../screens/settings_screen.dart';
 import '../screens/statistics_screen.dart';
 
@@ -31,7 +32,7 @@ class AppRoutes {
 }
 
 /// Screen index of the bottom navigation tabs.
-enum TabItem { home, statistics, settings }
+enum TabItem { home, statistics, profile, settings }
 
 /// Top-level shell hosting the three main tabs and the dashboard FAB.
 class _MainShell extends StatefulWidget {
@@ -55,6 +56,7 @@ class _MainShellState extends State<_MainShell> {
         children: const <Widget>[
           DashboardScreen(),
           StatisticsScreen(),
+          ProfileScreen(),
           SettingsScreen(),
         ],
       ),
@@ -81,6 +83,11 @@ class _MainShellState extends State<_MainShell> {
             icon: Icon(Icons.bar_chart_rounded),
             selectedIcon: Icon(Icons.bar_chart),
             label: 'Statistics',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.person_outline_rounded),
+            selectedIcon: Icon(Icons.person_rounded),
+            label: 'Profile',
           ),
           NavigationDestination(
             icon: Icon(Icons.settings_outlined),
